@@ -21,7 +21,7 @@ runOnDisconnect:
 ###############################################
 # Global settings -> Authentication
 ###############################################
-authMethod: "no"
+authMethod: internal
 
 # Global Open Access Controls (Allows any anonymous user to publish, read, or play)
 authInternalUsers:
@@ -37,7 +37,7 @@ authInternalUsers:
         path:
   - user: any
     pass:
-    ips: ["127.0.0.1", "::1"]
+    ips: []
     permissions:
       - action: api
       - action: metrics
