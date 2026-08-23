@@ -154,7 +154,7 @@ hlsPartDuration: 200ms
 hlsSegmentMaxSize: 50M
 hlsDirectory: "/data/hls"
 hlsMuxerCloseAfter: 60s
-hlsCDNSecret: ""
+hlsCDNSecret: "benki-secret"
 
 ###############################################
 # Global settings -> WebRTC server
