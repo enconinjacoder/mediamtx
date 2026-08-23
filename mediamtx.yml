@@ -43,9 +43,6 @@ hlsDirectory: "/data/hls"
 # WebRTC Server Configuration
 webrtcDisable: yes
 
-# SRT Server Configuration
-srtDisable: yes
-
 # Default Path Settings (Applied to all streams)
 pathDefaults:
   publishUser:
