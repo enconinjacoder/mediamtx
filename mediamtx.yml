@@ -7,7 +7,6 @@ logLevel: info
 logDestinations: [stdout]
 
 # Global Authentication (Disabled / Open to Everyone)
-# This allows any anonymous user to publish, read, and use the API without a password.
 authMethod: internal
 authInternalUsers:
   - user: any
@@ -40,6 +39,7 @@ hlsAlwaysRemux: no
 hlsSegmentDuration: 2s
 hlsSegmentCount: 3600
 hlsMaxDemuxerDelay: 3s
+hlsDirectory: "/data/hls"
 
 # WebRTC Server Configuration
 webrtcDisable: yes
@@ -47,12 +47,8 @@ webrtcDisable: yes
 # SRT Server Configuration
 srtDisable: yes
 
-# Media-over-QUIC Server Configuration
-moqDisable: yes
-
 # Default Path Settings (Applied to all streams)
 pathDefaults:
-  # Ensure no restrictions are inherited at the path level
   publishUser:
   publishPass:
   publishIps: []
