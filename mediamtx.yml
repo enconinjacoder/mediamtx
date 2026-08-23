@@ -143,7 +143,9 @@ hlsEncryption: false
 hlsServerKey: server.key
 hlsServerCert: server.crt
 hlsAllowOrigins: ["*"]
-hlsTrustedProxies: []
+
+hlsTrustedProxies: ["0.0.0.0/0"] 
+
 hlsAlwaysRemux: false
 hlsVariant: lowLatency
 hlsSegmentCount: 3600
