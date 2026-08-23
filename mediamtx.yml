@@ -38,7 +38,6 @@ hlsAddress: "0.0.0.0:5081"
 hlsAlwaysRemux: no
 hlsSegmentDuration: 2s
 hlsSegmentCount: 3600
-hlsMaxDemuxerDelay: 3s
 hlsDirectory: "/data/hls"
 
 # WebRTC Server Configuration
