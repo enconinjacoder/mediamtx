@@ -21,7 +21,7 @@ runOnDisconnect:
 ###############################################
 # Global settings -> Authentication
 ###############################################
-authMethod: internal
+authMethod: no
 
 # Global Open Access Controls (Allows any anonymous user to publish, read, or play)
 authInternalUsers:
