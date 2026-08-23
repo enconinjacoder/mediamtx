@@ -23,6 +23,7 @@ runOnDisconnect:
 ###############################################
 authMethod: internal
 
+# Global Open Access Controls (Allows any anonymous user to publish, read, or play)
 authInternalUsers:
   - user: any
     pass:
@@ -134,7 +135,7 @@ rtmpTrustedProxies: []
 # Global settings -> HLS server
 ###############################################
 hls: true
-hlsAddress: "0.0.0.0:5081"
+hlsAddress: 0.0.0.0:5081
 hlsEncryption: false
 hlsServerKey: server.key
 hlsServerCert: server.crt
@@ -201,15 +202,6 @@ pathDefaults:
   srtReadPassphrase:
   useAbsoluteTimestamp: false
 
-  # --- CRITICAL FIX FOR NO-AUTH HLS SUB-TRACKS ---
-  publishUser: any
-  publishPass: 
-  publishIps: []
-  readUser: any
-  readPass: 
-  readIps: []
-  # -----------------------------------------------
-
   alwaysAvailable: false
   alwaysAvailableTracks: []
   alwaysAvailableFile: ""
@@ -233,7 +225,7 @@ pathDefaults:
   rtspRangeType:
   rtspRangeStart:
   rtspScale:
-  rtspUDPSourcePortRange:
+  rtspUDPSourcePortRange: [32768, 60999]
 
   rtpSDP:
 
@@ -258,7 +250,7 @@ pathDefaults:
   rpiCameraSharpness: 1
   rpiCameraExposure: normal
   rpiCameraAWB: auto
-  rpiCameraAWBGains:
+  rpiCameraAWBGains: [0, 0]
   rpiCameraDenoise: "off"
   rpiCameraShutter: 0
   rpiCameraMetering: centre
