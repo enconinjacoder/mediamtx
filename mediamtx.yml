@@ -23,7 +23,6 @@ runOnDisconnect:
 ###############################################
 authMethod: internal
 
-# Global Authentication (Disabled / Open to Everyone)
 authInternalUsers:
   - user: any
     pass:
@@ -101,7 +100,6 @@ playbackTrustedProxies: []
 ###############################################
 # Global settings -> RTSP server
 ###############################################
-# Disabled as requested
 rtsp: false
 rtspTransports: [udp, multicast, tcp]
 rtspEncryption: "no"
@@ -124,7 +122,6 @@ rtspTrustedProxies: []
 ###############################################
 # Global settings -> RTMP server
 ###############################################
-# Enabled as requested
 rtmp: true
 rtmpEncryption: "no"
 rtmpAddress: 0.0.0.0:1935
@@ -136,7 +133,6 @@ rtmpTrustedProxies: []
 ###############################################
 # Global settings -> HLS server
 ###############################################
-# Configured based on your requested parameters
 hls: true
 hlsAddress: "0.0.0.0:5081"
 hlsEncryption: false
@@ -157,7 +153,6 @@ hlsCDNSecret: ""
 ###############################################
 # Global settings -> WebRTC server
 ###############################################
-# Disabled as requested
 webrtc: false
 webrtcAddress: :8889
 webrtcEncryption: false
@@ -178,14 +173,12 @@ webrtcTrackGatherTimeout: 2s
 ###############################################
 # Global settings -> SRT server
 ###############################################
-# Disabled as requested
 srt: false
 srtAddress: :8890
 
 ###############################################
-# Global settings -> MoQ server
+# MoQ server
 ###############################################
-# Disabled as requested
 moq: false
 moqHTTP2Address: :8892
 moqHTTP3Address: :8892
@@ -207,6 +200,15 @@ pathDefaults:
   maxReaders: 0
   srtReadPassphrase:
   useAbsoluteTimestamp: false
+
+  # --- CRITICAL FIX FOR NO-AUTH HLS SUB-TRACKS ---
+  publishUser: any
+  publishPass: 
+  publishIps: []
+  readUser: any
+  readPass: 
+  readIps: []
+  # -----------------------------------------------
 
   alwaysAvailable: false
   alwaysAvailableTracks: []
@@ -231,7 +233,7 @@ pathDefaults:
   rtspRangeType:
   rtspRangeStart:
   rtspScale:
-  rtspUDPSourcePortRange: [32768, 60999]
+  rtspUDPSourcePortRange:
 
   rtpSDP:
 
@@ -256,7 +258,7 @@ pathDefaults:
   rpiCameraSharpness: 1
   rpiCameraExposure: normal
   rpiCameraAWB: auto
-  rpiCameraAWBGains: [0, 0]
+  rpiCameraAWBGains:
   rpiCameraDenoise: "off"
   rpiCameraShutter: 0
   rpiCameraMetering: centre
