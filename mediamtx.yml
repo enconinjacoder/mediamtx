@@ -147,7 +147,7 @@ hlsAllowOrigins: ["*"]
 hlsTrustedProxies: ["0.0.0.0/0"] 
 
 hlsAlwaysRemux: false
-hlsVariant: lowLatency
+hlsVariant: fmp4
 hlsSegmentCount: 3600
 hlsSegmentDuration: 2s
 hlsPartDuration: 200ms
