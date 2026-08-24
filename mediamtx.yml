@@ -148,7 +148,7 @@ hlsTrustedProxies: ["0.0.0.0/0"]
 
 hlsAlwaysRemux: false
 hlsVariant: fmp4
-hlsSegmentCount: 7        # Keeps about 15 seconds of rewind buffer, saves RAM
+hlsSegmentCount: 15        # Keeps about 15 seconds of rewind buffer, saves RAM
 hlsSegmentDuration: 1s     # Clean 2-second segments
 hlsPartDuration: 200ms     # Ignored when using fmp4, but safe to leave
 hlsSegmentMaxSize: 50M     # Safety cap
