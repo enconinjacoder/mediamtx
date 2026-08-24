@@ -153,7 +153,7 @@ hlsSegmentDuration: 2s
 hlsPartDuration: 200ms
 hlsSegmentMaxSize: 50M
 hlsDirectory: "/data/hls"
-hlsMuxerCloseAfter: 60s
+hlsMuxerCloseAfter: 120s
 hlsCDNSecret: "benki-secret"
 
 ###############################################
@@ -307,4 +307,11 @@ pathDefaults:
 # Path settings
 ###############################################
 paths:
-  all_others:
+  # This dynamically catches any incoming stream and forces FFmpeg to transcode it
+  ~^([a-zA-Z0-9_-]+)$:
+    runOnReady: ffmpeg -i rtsp://localhost:$RTSP_PORT/$MTX_PATH -c:v libx264 -preset ultrafast -tune zerolatency -b:v 2500k -maxrate 2500k -bufsize 5000k -vf scale=-2:720 -g 60 -c:a aac -b:a 128k -f rtsp rtsp://localhost:$RTSP_PORT/safe_$1
+    runOnReadyRestart: yes
+
+  # This path handles the transcoded output that your web player watches
+  safe_~^([a-zA-Z0-9_-]+)$:
+    # Inherits your global hlsMuxerCloseAfter: 60s setting automatically
