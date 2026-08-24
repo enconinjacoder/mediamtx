@@ -307,9 +307,9 @@ pathDefaults:
 # Path settings
 ###############################################
 paths:
-  # Captures incoming RTMP, transcodes with FFmpeg, and pushes back via RTMP to the safe path
-  ~^([a-zA-Z0-9_-]+)$:
-    runOnAvailable: ffmpeg -i rtmp://localhost:1935/$MTX_PATH -c:v libx264 -preset ultrafast -tune zerolatency -b:v 2500k -maxrate 2500k -bufsize 5000k -vf scale=-2:720 -g 60 -c:a aac -b:a 128k -f flv rtmp://localhost:1935/safe_$MTX_PATH
+  # Matches any stream EXCEPT those starting with "enc_" to prevent loops
+  ~^(?!enc_)([a-zA-Z0-9_-]+)$:
+    runOnAvailable: ffmpeg -i rtmp://localhost:1935/$MTX_PATH -c:v libx264 -preset ultrafast -tune zerolatency -b:v 2500k -maxrate 2500k -bufsize 5000k -vf scale=-2:720 -g 60 -c:a aac -b:a 128k -f flv rtmp://localhost:1935/enc_$MTX_PATH
     runOnAvailableRestart: yes
 
   # Catch-all rule
