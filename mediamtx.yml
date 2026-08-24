@@ -307,11 +307,10 @@ pathDefaults:
 # Path settings
 ###############################################
 paths:
-  # Automatically catches any incoming stream, transcodes via FFmpeg to protect CPU/bitrate, 
-  # and republishes it securely as "safe_<stream_name>"
+  # Matches any incoming stream, grabs it via RTMP, transcodes it, and outputs safely
   ~^([a-zA-Z0-9_-]+)$:
-    runOnAvailable: ffmpeg -i rtsp://localhost:$RTSP_PORT/$MTX_PATH -c:v libx264 -preset ultrafast -tune zerolatency -b:v 2500k -maxrate 2500k -bufsize 5000k -vf scale=-2:720 -g 60 -c:a aac -b:a 128k -f rtsp rtsp://localhost:$RTSP_PORT/safe_$MTX_PATH
+    runOnAvailable: ffmpeg -i rtmp://localhost:1935/$MTX_PATH -c:v libx264 -preset ultrafast -tune zerolatency -b:v 2500k -maxrate 2500k -bufsize 5000k -vf scale=-2:720 -g 60 -c:a aac -b:a 128k -f rtsp rtsp://localhost:$RTSP_PORT/safe_$MTX_PATH
     runOnAvailableRestart: yes
 
-  # Catch-all fallback rule to prevent path syntax validation errors on startup
+  # Catch-all rule
   all_others:
