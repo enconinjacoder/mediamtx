@@ -147,7 +147,7 @@ hlsAllowOrigins: ["*"]
 hlsTrustedProxies: ["0.0.0.0/0"] 
 
 hlsAlwaysRemux: false
-hlsVariant: fmp4           # CHANGED: fmp4 is lighter and universally supported by CDNs
+hlsVariant: mpegts           # CHANGED: mpegts is lighter and universally supported by CDNs
 hlsSegmentCount: 15        # CHANGED: Keeps 60 seconds of video available to prevent 404 errors
 hlsSegmentDuration: 4s     # CHANGED: 4-second chunks are the industry standard for CDN caching
 hlsDirectory: ""
