@@ -148,7 +148,7 @@ hlsTrustedProxies: ["0.0.0.0/0"]
 
 hlsAlwaysRemux: false
 hlsVariant: mpegts           # CHANGED: mpegts is lighter and universally supported by CDNs
-hlsSegmentCount: 15        # CHANGED: Keeps 60 seconds of video available to prevent 404 errors
+hlsSegmentCount: 5       
 hlsSegmentDuration: 4s     # CHANGED: 4-second chunks are the industry standard for CDN caching
 hlsDirectory: ""
 hlsSegmentMaxSize: 50M     
