@@ -142,7 +142,7 @@ hlsAddress: "0.0.0.0:5081"
 hlsEncryption: false
 hlsServerKey: server.key
 hlsServerCert: server.crt
-hlsAllowOrigins: ["https://aarpaar-stream.brchub.tech", "https://stream.brchub.tech", "http://localhost:5173"]
+hlsAllowOrigins: ["*"]
 
 hlsTrustedProxies: ["0.0.0.0/0"] 
 
