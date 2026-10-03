@@ -306,6 +306,12 @@ pathDefaults:
 # Path settings
 ###############################################
 paths:
+  ~^[0-9a-f]{32}$:
+    runOnAvailable: >-
+      curl --fail --silent --show-error --max-time 5
+      -X POST
+      "$STREAM_LIVE_WEBHOOK_URL?stream_key=$MTX_PATH"
+    runOnAvailableRestart: false
   # 1. Matches any stream that does NOT start with 'enc_' by matching standard names 
   # and explicitly checking that the output target doesn't loop.
   # ~^([a-df-z0-9_-][a-z0-9_-]*)$:
