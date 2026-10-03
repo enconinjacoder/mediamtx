@@ -35,13 +35,10 @@ authInternalUsers:
         path:
       - action: playback
         path:
-  - user: any
-    pass:
-    ips: ["127.0.0.1", "::1"]
-    permissions:
-      - action: api
-      - action: metrics
-      - action: pprof
+
+# Configure the private control API account with environment variables:
+# MTX_AUTHINTERNALUSERS_1_USER, MTX_AUTHINTERNALUSERS_1_PASS, and
+# MTX_AUTHINTERNALUSERS_1_PERMISSIONS_0_ACTION=api.
 
 authHTTPAddress:
 authHTTPFingerprint:
@@ -57,6 +54,8 @@ authJWTAudience:
 ###############################################
 # Global settings -> Control API
 ###############################################
+# Enable and bind the control API with MTX_API=yes and
+# MTX_APIADDRESS=:9997 in Railway. Do not create a public domain for this port.
 api: false
 apiAddress: :9997
 apiEncryption: false
