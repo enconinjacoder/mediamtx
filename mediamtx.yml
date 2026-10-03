@@ -309,7 +309,7 @@ paths:
     runOnAvailable: >-
       curl --fail --silent --show-error --max-time 5
       -X POST
-      "$STREAM_LIVE_WEBHOOK_URL?stream_key=$MTX_PATH"
+      "$STREAM_LIVE_WEBHOOK_URL?stream_key=$MTX_PATH&publisher_id=$MTX_SOURCE_ID"
     runOnAvailableRestart: false
   # 1. Matches any stream that does NOT start with 'enc_' by matching standard names 
   # and explicitly checking that the output target doesn't loop.
