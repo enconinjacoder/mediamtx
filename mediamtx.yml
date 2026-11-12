@@ -35,10 +35,13 @@ authInternalUsers:
         path:
       - action: playback
         path:
-
-# Configure the private control API account with environment variables:
-# MTX_AUTHINTERNALUSERS_1_USER, MTX_AUTHINTERNALUSERS_1_PASS, and
-# MTX_AUTHINTERNALUSERS_1_PERMISSIONS_0_ACTION=api.
+  - user: any
+    pass:
+    ips: ["127.0.0.1", "::1"]
+    permissions:
+      - action: api
+      - action: metrics
+      - action: pprof
 
 authHTTPAddress:
 authHTTPFingerprint:
@@ -54,10 +57,8 @@ authJWTAudience:
 ###############################################
 # Global settings -> Control API
 ###############################################
-# Enable and bind the control API with MTX_API=yes and
-# MTX_APIADDRESS=:9997 in Railway. Do not create a public domain for this port.
-api: false
-apiAddress: :9997
+api: true
+apiAddress: 127.0.0.1:9997
 apiEncryption: false
 apiServerKey: server.key
 apiServerCert: server.crt
@@ -311,6 +312,11 @@ paths:
       -X POST
       "$STREAM_LIVE_WEBHOOK_URL?stream_key=$MTX_PATH&publisher_id=$MTX_SOURCE_ID"
     runOnAvailableRestart: false
+    # Streamer's video dropped: viewers see "paused" (ignored if the stream already ended).
+    runOnUnavailable: >-
+      curl --fail --silent --show-error --max-time 5
+      -X POST
+      "$STREAM_LIVE_WEBHOOK_URL?stream_key=$MTX_PATH&event=unavailable"
   # 1. Matches any stream that does NOT start with 'enc_' by matching standard names 
   # and explicitly checking that the output target doesn't loop.
   # ~^([a-df-z0-9_-][a-z0-9_-]*)$:
