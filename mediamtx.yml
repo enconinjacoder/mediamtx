@@ -24,8 +24,8 @@ runOnDisconnect:
 # Every publish, read and API call is checked by the backend
 # (POST /api/v1/streams/mediamtx/auth, handlers.MediaMTXAuthHandler):
 #   publish: OBS stream key "<playback_id>?key=<stream_key>", stream scheduled or live
-#   read:    only the CDN's origin-pull secret (MEDIAMTX_CDN_SECRET, as Basic-auth password or Bearer token)
-#   api:     only the backend's MEDIAMTX_API_USERNAME/PASSWORD
+#   read:    never via the backend (it refuses); the CDN's reads carry hlsCDNSecret and skip auth
+#   api:     only the backend's kick call, Bearer <MEDIAMTX_HOOK_SECRET>
 # MediaMTX doesn't expand $VARS in config values (only in hook commands), so
 # the real address is built from BACKEND_URL when MediaMTX starts.
 # BACKEND_URL="http://aarpaar-backend.railway.internal:4048"
@@ -148,7 +148,11 @@ hlsSegmentDuration: 4s     # CHANGED: 4-second chunks are the industry standard 
 hlsDirectory: ""
 hlsSegmentMaxSize: 50M     
 hlsMuxerCloseAfter: 120s   # CHANGED: Keeps the stream warm for 2 full minutes
-# hlsCDNSecret: ""
+# Requests with "Authorization: Bearer <hlsCDNSecret>" are the CDN: one shared
+# session per stream, no auth call. Every other read goes to the backend auth
+# endpoint, which refuses it. Set the value with MTX_HLSCDNSECRET in Railway
+# (same value as Bunny's edge rule). Must not contain ':'.
+hlsCDNSecret: ""
 
 ###############################################
 # Global settings -> WebRTC server
