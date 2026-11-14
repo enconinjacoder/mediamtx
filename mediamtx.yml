@@ -21,26 +21,22 @@ runOnDisconnect:
 ###############################################
 # Global settings -> Authentication
 ###############################################
-authMethod: internal
+# Every publish, read and API call is checked by the backend
+# (POST /api/v1/streams/mediamtx/auth, handlers.MediaMTXAuthHandler):
+#   publish: OBS stream key "<playback_id>?key=<stream_key>", stream scheduled or live
+#   read:    only the CDN's origin-pull secret (MEDIAMTX_CDN_SECRET, as Basic-auth password or Bearer token)
+#   api:     only the backend's MEDIAMTX_API_USERNAME/PASSWORD
+# MediaMTX doesn't expand $VARS in config values (only in hook commands), so
+# the real address is built from BACKEND_URL when MediaMTX starts.
+# BACKEND_URL="http://aarpaar-backend.railway.internal:4048"
+# MEDIAMTX_HOOK_SECRET="${{shared.MEDIAMTX_HOOK_SECRET}}"
+# MTX_AUTHHTTPADDRESS="${{BACKEND_URL}}/api/v1/streams/mediamtx/auth?secret=${{MEDIAMTX_HOOK_SECRET}}"
+# MTX_AUTHHTTPADDRESS overrides the local default below.
+authMethod: http
 
-# Global Authentication (Disabled / Open to Everyone)
-authInternalUsers:
-  - user: any
-    pass:
-    # ips: []
-    permissions:
-      - action: publish
-        path:
-      - action: read
-        path:
-      - action: playback
-        path:
+authInternalUsers: []
 
-# Configure the private control API account with environment variables:
-# MTX_AUTHINTERNALUSERS_1_USER, MTX_AUTHINTERNALUSERS_1_PASS, and
-# MTX_AUTHINTERNALUSERS_1_PERMISSIONS_0_ACTION=api.
-
-authHTTPAddress:
+authHTTPAddress: http://localhost:8080/api/v1/streams/mediamtx/auth
 authHTTPFingerprint:
 authHTTPExclude: []
 
@@ -54,9 +50,9 @@ authJWTAudience:
 ###############################################
 # Global settings -> Control API
 ###############################################
-# Enable and bind the control API with MTX_API=yes and
-# MTX_APIADDRESS=:9997 in Railway. Do not create a public domain for this port.
-api: false
+# Only used by the backend to disconnect OBS when a stream ends. Keep it on
+# Railway's private network: do not create a public domain for this port.
+api: true
 apiAddress: :9997
 apiEncryption: false
 apiServerKey: server.key
@@ -143,7 +139,7 @@ hlsServerKey: server.key
 hlsServerCert: server.crt
 hlsAllowOrigins: ["*"]
 
-hlsTrustedProxies: ["0.0.0.0/0"] 
+hlsTrustedProxies: []
 
 hlsAlwaysRemux: false
 hlsVariant: mpegts           # CHANGED: mpegts is lighter and universally supported by CDNs
@@ -152,7 +148,7 @@ hlsSegmentDuration: 4s     # CHANGED: 4-second chunks are the industry standard 
 hlsDirectory: ""
 hlsSegmentMaxSize: 50M     
 hlsMuxerCloseAfter: 120s   # CHANGED: Keeps the stream warm for 2 full minutes
-hlsCDNSecret: "benki-secret"
+# hlsCDNSecret: ""
 
 ###############################################
 # Global settings -> WebRTC server
@@ -305,22 +301,22 @@ pathDefaults:
 # Path settings
 ###############################################
 paths:
+  # The path is the stream's public playback_id; only streams the auth endpoint
+  # allowed ever get here. MediaMTX's env needs MEDIAMTX_HOOK_SECRET and
+  # BACKEND_URL (the backend's base URL, no trailing slash, e.g. http://backend.railway.internal:8080).
   ~^[0-9a-f]{32}$:
     runOnAvailable: >-
       curl --fail --silent --show-error --max-time 5
-      -X POST
-      "$STREAM_LIVE_WEBHOOK_URL?stream_key=$MTX_PATH&publisher_id=$MTX_SOURCE_ID"
+      -X POST -H "X-MediaMTX-Secret: $MEDIAMTX_HOOK_SECRET"
+      "$BACKEND_URL/api/v1/streams/mediamtx/webhook?playback_id=$MTX_PATH&publisher_id=$MTX_SOURCE_ID"
     runOnAvailableRestart: false
     # Streamer's video dropped: viewers see "paused" (ignored if the stream already ended).
     runOnUnavailable: >-
       curl --fail --silent --show-error --max-time 5
-      -X POST
-      "$STREAM_LIVE_WEBHOOK_URL?stream_key=$MTX_PATH&event=unavailable"
+      -X POST -H "X-MediaMTX-Secret: $MEDIAMTX_HOOK_SECRET"
+      "$BACKEND_URL/api/v1/streams/mediamtx/webhook?playback_id=$MTX_PATH&event=unavailable"
   # 1. Matches any stream that does NOT start with 'enc_' by matching standard names 
   # and explicitly checking that the output target doesn't loop.
   # ~^([a-df-z0-9_-][a-z0-9_-]*)$:
   #   runOnAvailable: ffmpeg -i rtmp://localhost:1935/$MTX_PATH -c:v libx264 -preset ultrafast -tune zerolatency -b:v 2500k -maxrate 2500k -bufsize 5000k -vf scale=-2:720 -g 60 -c:a aac -b:a 128k -f flv rtmp://localhost:1935/enc_$MTX_PATH
   #   runOnAvailableRestart: yes
-
-  # 2. Catch-all for encoded streams and everything else
-  all_others:
