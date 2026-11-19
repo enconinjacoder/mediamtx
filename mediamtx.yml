@@ -144,7 +144,7 @@ hlsTrustedProxies: []
 hlsAlwaysRemux: true
 hlsVariant: mpegts           # CHANGED: mpegts is lighter and universally supported by CDNs
 hlsSegmentCount: 7       
-hlsSegmentDuration: 2s     # CHANGED: 4-second chunks are the industry standard for CDN caching
+hlsSegmentDuration: 4s     # CHANGED: 4-second chunks are the industry standard for CDN caching
 hlsDirectory: ""
 hlsSegmentMaxSize: 50M     
 hlsMuxerCloseAfter: 120s   # CHANGED: Keeps the stream warm for 2 full minutes
