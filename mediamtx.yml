@@ -148,11 +148,10 @@ hlsSegmentDuration: 4s     # CHANGED: 4-second chunks are the industry standard 
 hlsDirectory: ""
 hlsSegmentMaxSize: 50M     
 hlsMuxerCloseAfter: 120s   # CHANGED: Keeps the stream warm for 2 full minutes
-# Requests with "Authorization: Bearer <hlsCDNSecret>" are the CDN: one shared
-# session per stream, no auth call. Every other read goes to the backend auth
-# endpoint, which refuses it. Set the value with MTX_HLSCDNSECRET in Railway
-# (same value as Bunny's edge rule). Must not contain ':'.
-hlsCDNSecret: ""
+# MediaMTX detects CDN urls with hlsCDNSecret
+# Leave it as is, so that CDN expiry time and other fields do no affect MediaMTX
+# Note : Ensure that MTX_AUTHHTTPADDRESS is configured for read, publish and api validations
+hlsCDNSecret: "<leave-as-is>"
 
 ###############################################
 # Global settings -> WebRTC server
